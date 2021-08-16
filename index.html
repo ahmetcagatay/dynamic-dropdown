@@ -10,19 +10,45 @@
 </head>
 
 <body>
-    <div id="inner">
-        <label for="base">Some</label>
+    <div class="base">
+        <label for="base">Base</label>
         <select class="base">
-            <option value="x">x</option>
-            <option value="y">y</option>
-            <option value="z">z</option>
+            <option value="x" class="aa">X</option>
+            <option value="y" class="bb">Y</option>
+            <option value="z" class="cc">Z</option>
+        </select>
+    </div>
+    <div class="base">
+        <label for="base">Base</label>
+        <select class="base">
+            <option value="x" class="aa">X</option>
+            <option value="y" class="bb">Y</option>
+            <option value="z" class="cc">Z</option>
         </select>
     </div>
 </body>
 <script>
-    $(document).on("change",".base",function () {
-        var el = $(this);
-        el.parent().append('<br><label for="base">Some </label><select class="base"><option value="x">x</option><option value="y">y</option><option value="z">z</option></select>');
+    $(document).on("change", "select.base", function () {
+        $option = $(this).children("option:selected");
+        
+        //delete last child for update
+        console.log($(this).siblings("div").remove());
+        //if option aa
+        console.log($option.attr("class"));
+        console.log("aa bb");
+        console.log($option.attr("class") == "aa bb");
+        if ($option.attr("class") == "aa") {
+            var el = $(this);
+            $div = el.parent().append($('<div class="' + $option.attr("class") + '">'));
+            $div = $div.children("." + $option.attr("class")).text("some").append($('<select class="' + $option.attr("class") + '">'));
+            
+            // add options
+            var options = { x: "X", y: "Y" }
+            $select = $div.children(":last-child");
+            for (const [key, value] of Object.entries(options)) {
+                $select.append($('<option>').val(key).text(value));
+            }
+        }
     });
 </script>
 
