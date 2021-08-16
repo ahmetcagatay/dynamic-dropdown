@@ -20,56 +20,66 @@ class Option {
         else{
             return child;
         }
-        
+
     }
 }
 
 let base = new Option("0", "Merhaba", ["a", "b", "c"]);
-firstchild = base.createChild("Selamun", ["e", "d", "f"]);
-firstchild.createChild("Aleykum", ["e", "d", "f"]);
-selam = firstchild.createChild("Aleykum Selam", ["e", "d", "f"]);
+
+firstchild = base.createChild("Selamun Aleykum", ["e", "d", "f"]);
+aleykum = firstchild.createChild("Aleykum Selam", ["e", "d", "f"]);
+aleykum.createChild("Bitti", ["e", "d", "f"]);
+aleykum.createChild("Bitti2", ["e", "d", "f"]);
+aleykum.createChild("Bitti3", ["e", "d", "f"]);
+selam = firstchild.createChild("Ve Aleykum Selam", ["e", "d", "f"]);
 selam.createChild("Verahmetullahi", ["e", "d", "f"]);
+
 secondchild = base.createChild("nasılsın?", ["e", "d", "f"]);
 cevap = secondchild.createChild("iyiyim?", ["e", "d", "f"]);
+secondchild.createChild("Sen nasılsın?", ["e", "d", "f"]);
+secondchild.createChild("Nasıl gidiyor", ["e", "d", "f"]);
+
 newBase = base.getChild("0");
 console.log(firstchild.path);
 console.log(newBase.path);
 
 function createDropwdownDiv(select,path) {
     var newBase = base.getChild(path);
-    debugger;
-    $div = select.parent().append($('<div class="' + $option.attr("class") + '">'));
-    debugger;
-    $div = $div.children("." + $option.attr("class")).text(newBase.text).append($('<select id="' + newBase.path +  '"class="' + $option.attr("class") + '">'));
-    debugger;
+
+    $div = select.parent().append($('<div class="' + $option.attr("class") + '">')).val(path);
+    $div.children("div."+$option.attr("class")).append("<label>").text(newBase.text);
+    $div = $div.children("."+$option.attr("class")).append($('<select id="' + newBase.path +  '"class="' + $option.attr("class") + '">'));
+
+    //Options added into select
     $select = $div.children(":last-child");
+    //Options added into select
     for (const [key, value] of Object.entries(newBase.childs)) {
         if (value.childs.length > 0){
             $select.append($('<option class="dynamic">').val(value.path).text(value.text));
         }
         else{
             $select.append($('<option class="static">').val(value.path).text(value.text));
-
         }
     }
 }
 
+$(document).ready( function(){
+    createDropwdownDiv($("body"),"0");
+});
 
-// console.log(firstchild.text);
 
-// base.getChild("0/1");
 
 $(document).on("change", "select", function () {
 
     $option = $(this).children("option:selected");
 
     //delete last child for update
-    // $(this).siblings("div").remove();
+    $(this).siblings("div").remove();
     //if option aa
     // console.log($option.attr("class"));
 
     if ($option.attr("class") == "dynamic") {
-        
+
         createDropwdownDiv($(this),$option.val());
     }
 });
